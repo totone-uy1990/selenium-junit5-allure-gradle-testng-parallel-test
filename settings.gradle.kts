@@ -1,0 +1,1 @@
+rootProject.name = "seleniuM-junit5-parallel"
