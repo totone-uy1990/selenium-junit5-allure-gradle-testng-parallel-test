@@ -2,6 +2,7 @@ import org.gradle.internal.classpath.Instrumented.systemProperty
 
 plugins {
     id("java")
+    id("io.qameta.allure") version "2.12.0"
 }
 
 repositories {
@@ -14,7 +15,6 @@ dependencies {
     // CUCUMBER + JUNIT PLATFORM ENGINE
     // -------------------------------
     testImplementation("io.cucumber:cucumber-core:7.18.1")
-
     testImplementation("io.cucumber:cucumber-java:7.18.1")
     testImplementation("io.cucumber:cucumber-junit-platform-engine:7.18.1")
 
@@ -36,6 +36,23 @@ dependencies {
     // JUnit 5 (para plataforma general)
     testImplementation("org.junit.platform:junit-platform-suite:1.10.2")
 }
+
+
+
+
+
+allure {
+    report {
+        version.set("2.29.0") // Versión de la herramienta de reporte (CLI)
+    }
+    adapter {
+        autoconfigure.set(false) // Desactivamos la autoconfiguración para que no choque con tu TestRunner
+    }
+}
+
+
+
+
 
 
 tasks.test {
