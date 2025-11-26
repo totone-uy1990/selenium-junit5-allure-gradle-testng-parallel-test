@@ -36,20 +36,41 @@ public class BasePage {
             options.setAcceptInsecureCerts(true);
 
             if (USERNAME != null && ACCESS_KEY != null) {
-                // BrowserStack capabilities
+                // ----------------------------------------
+                // CONFIGURACIÓN BROWSERSTACK (Nube)
+                // ----------------------------------------
                 HashMap<String, Object> bstackOptions = new HashMap<>();
                 bstackOptions.put("os", "Windows");
                 bstackOptions.put("osVersion", "11");
                 bstackOptions.put("sessionName", "Parallel Test");
-                options.addArguments("--headless=new");
                 options.setCapability("bstack:options", bstackOptions);
+                // Nota: BrowserStack no suele necesitar headless=new explícito si quieres ver el video después
 
                 driver.set(new RemoteWebDriver(new URL(REMOTE_URL), options));
 
             } else {
-                // LOCAL
-                System.out.println("Ejecutando en local...");
+                // ----------------------------------------
+                // CONFIGURACIÓN LOCAL vs GITHUB ACTIONS
+                // ----------------------------------------
                 options.addArguments("--remote-allow-origins=*");
+
+                // Detectamos si estamos en GitHub Actions buscando la variable "CI"
+                String isCI = System.getenv("CI");
+
+                if (isCI != null && isCI.equals("true")) {
+                    // --- GITHUB ACTIONS (HEADLESS) ---
+                    System.out.println("Entorno CI (GitHub) detectado: Ejecutando Headless");
+                    options.addArguments("--headless=new"); // Fundamental para servidores sin pantalla
+                    options.addArguments("--window-size=1920,1080"); // Simula pantalla Full HD
+                    options.addArguments("--no-sandbox"); // Requerido para contenedores Docker/Linux
+                    options.addArguments("--disable-dev-shm-usage"); // Evita crash por memoria compartida
+                    options.addArguments("--disable-gpu");
+                } else {
+                    // --- TU PC LOCAL (CON PANTALLA) ---
+                    System.out.println("Entorno LOCAL detectado: Ejecutando navegador visual");
+                    options.addArguments("--start-maximized");
+                }
+
                 driver.set(new ChromeDriver(options));
             }
 
@@ -57,7 +78,10 @@ public class BasePage {
             throw new RuntimeException(e);
         }
 
-        driver.get().manage().window().maximize();
+        // Si no estamos en modo headless, aseguramos maximizar (aunque window-size ya ayuda en CI)
+        if (driver.get() != null) {
+            // driver.get().manage().window().maximize(); // Opcional, ya lo cubrimos con los argumentos arriba
+        }
     }
 
     // --------------------------
