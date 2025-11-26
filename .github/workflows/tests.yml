@@ -58,7 +58,7 @@ jobs:
           allure_history: allure-history
           keep_reports: 20 # Guarda los últimos 20 reportes en el historial
 
-      # 4. Publicación
+      # 4. Publicación.
       - name: Deploy Allure Report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
