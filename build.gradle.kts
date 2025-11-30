@@ -31,7 +31,6 @@ dependencies {
     // -------------------------------
     // ASSERTIONS (opcional)
     // -------------------------------
-    testImplementation("org.assertj:assertj-core:3.26.0")
 
     // JUnit 5 (para plataforma general)
     testImplementation("org.junit.platform:junit-platform-suite:1.10.2")
@@ -42,11 +41,9 @@ dependencies {
 
 
 allure {
-    report {
-        version.set("2.29.0") // Versión de la herramienta de reporte (CLI)
-    }
-
+    version = "2.12.0"
 }
+
 
 
 
@@ -72,6 +69,6 @@ tasks.test {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(24))
     }
 }

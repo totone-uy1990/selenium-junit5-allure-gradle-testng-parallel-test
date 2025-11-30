@@ -1,41 +1,23 @@
-name: Run Selenium + Cucumber Tests
+name: Run tests and publish the report
+on: [push]
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: "0 3,9,15,21 * * *"
-
-permissions:
-  contents: write
-  pages: write
+permissions: write-all
 
 jobs:
-  test-and-report:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-        # JDK
-      - name: Set up JDK 21
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: temurin
+          java-version: 21
 
-      - name: Grant execute perm to gradlew
-        run: chmod +x gradlew
-
-        # Ejecutar pruebas
       - name: Run tests
-        if: always()
-        run: ./gradlew clean test
+        run: SELENIDE_URL="${{ vars.SELENIDE_URL }}" SELENIDE_HEADLESS=true ./gradlew clean test
 
-        # Descargar historial previo de GH Pages
       - name: Load test report history
         uses: actions/checkout@v4
         if: always()
@@ -44,19 +26,16 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-        # Construcción del reporte
-      - name: Build Allure Report
-        uses: simple-elf/allure-report-action@v1.7
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.10
         if: always()
         with:
-          allure_results: build/allure-results
           gh_pages: gh-pages
           allure_history: allure-history
-          keep_reports: 20
+          allure_results: build/allure-results
 
-        # Publicación
-      - name: Publish report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
