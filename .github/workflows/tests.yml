@@ -1,19 +1,36 @@
 name: Run tests and publish report
-on: [push]
+
+on:
+  push:
+    branches: [ "main", "master" ] # Ejecutar solo en push a ramas principales (opcional, pero recomendado)
+  pull_request: # Útil para validar PRs antes de mezclar
+
+# ESTO ES CRÍTICO: Permisos para escribir en gh-pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          distribution: temurin
-          java-version: 21
+          distribution: 'temurin'
+          java-version: '21'
+
+      # Paso de seguridad por si gradlew perdió permisos de ejecución
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Run tests
         run: ./gradlew clean test
+        continue-on-error: true # Permite que el pipeline siga para generar el reporte aunque fallen tests
 
       - name: Load test report history
         uses: actions/checkout@v3
@@ -38,3 +55,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+          commit_message: ${{ github.event.head_commit.message }}
