@@ -7,7 +7,7 @@ repositories {
     mavenCentral()
 }
 
-// Versión única de Allure (no repitas variables)
+// Versión única de Allure (no repitas variables).
 val allureVersion = "2.25.0"
 
 // Versión de AspectJ
