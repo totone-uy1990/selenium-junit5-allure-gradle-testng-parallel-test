@@ -7,16 +7,21 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource
-        ("features")
-@ConfigurationParameter
-        (key = Constants.FEATURES_PROPERTY_NAME, value = "src/test/resources/features")
-@ConfigurationParameter
-        (key = GLUE_PROPERTY_NAME, value = "steps")
+@SelectClasspathResource("features")
 
-//allure reports
-@ConfigurationParameter
-        (key = PLUGIN_PROPERTY_NAME, value = "pretty, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm")
+@ConfigurationParameter(
+        key = FEATURES_PROPERTY_NAME,
+        value = "src/test/resources/features"
+)
+@ConfigurationParameter(
+        key = GLUE_PROPERTY_NAME,
+        value = "steps"
+)
 
+// Allure + JSON necesario
+@ConfigurationParameter(
+        key = PLUGIN_PROPERTY_NAME,
+        value = "pretty, json:build/allure-results/cucumber-report.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
+)
 public class TestRunner {
 }
