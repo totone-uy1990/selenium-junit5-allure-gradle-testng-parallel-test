@@ -1,8 +1,10 @@
-name: Tests + Allure Report (Docker)
+name: Run Tests & Publish Allure Report
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: write
@@ -10,63 +12,56 @@ permissions:
   id-token: write
 
 jobs:
-  test:
+
+  tests:
+    name: Run Tests & Generate Allure
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      # --- Checkout del código ---
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # HISTORY
-      - name: Descargar history previo
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-history
-          path: allure-history
-        continue-on-error: true
-
-      # JDK
-      - name: Set up JDK 24
+      # --- Seteo de Java (ajustá la versión que uses localmente) ---
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
-          java-version: 21
+          distribution: 'temurin'
+          java-version: '17'
 
-      # TESTS
-      - name: Run tests (JUnit Platform + Cucumber)
-        run: |
-          ./gradlew clean test --info \
-            -Dchrome.options="--headless=new --no-sandbox --disable-dev-shm-usage"
+      # --- Cache de Gradle para acelerar ---
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
-      # Copiar history previo a resultados nuevos
-      - name: Merge previous history
-        run: |
-          mkdir -p build/allure-results/history
-          if [ -d "allure-history/history" ]; then
-            cp -R allure-history/history build/allure-results/
-          fi
+      # --- Ejecutar tests ---
+      - name: Run Tests
+        run: ./gradlew clean test --info
 
-      # ---------------------------
-      # 🔥 GENERAR ALLURE USANDO DOCKER
-      # ---------------------------
-      - name: Generate Allure Report (Docker)
+      # --- Generar reporte Allure usando Docker ---
+      - name: Generate Allure Report with Docker
         run: |
+          mkdir -p allure-report
           docker run --rm \
-            -v ${{ github.workspace }}/build/allure-results:/allure-results \
-            -v ${{ github.workspace }}/allure-report:/allure-report \
-            qameta/allure:2.29.0 \
-            generate /allure-results -o /allure-report --clean
+            -v ${{ github.workspace }}/target/allure-results:/app/allure-results \
+            -v ${{ github.workspace }}/allure-report:/app/allure-report \
+            frankescobar/allure-docker-service generate
 
-      # Save history again
-      - name: Upload history
+      # --- Guardar resultados como artefacto (opcional pero útil) ---
+      - name: Upload Allure Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: allure-history
-          path: allure-report/history
+          name: allure-report
+          path: allure-report
 
-      # Publicar en GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      # --- Preparar GitHub Pages ---
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
+          path: allure-report
+
+  deploy:
