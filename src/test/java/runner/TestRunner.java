@@ -12,8 +12,6 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @ConfigurationParameter
         (key = Constants.FEATURES_PROPERTY_NAME, value = "src/test/resources/features")
 @ConfigurationParameter
-        (key = PLUGIN_PROPERTY_NAME, value = "pretty")
-@ConfigurationParameter
         (key = GLUE_PROPERTY_NAME, value = "steps")
 
 //allure reports
