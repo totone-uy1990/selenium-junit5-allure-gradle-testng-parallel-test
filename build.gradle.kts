@@ -46,7 +46,7 @@ tasks.test {
     // Configuración para que Allure sepa dónde dejar los resultados
     systemProperty("allure.results.directory", "build/allure-results")
 
-    // Mejor visualización en consola
+    // Mejor visualización en consola.
     testLogging {
         events("passed", "skipped", "failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
