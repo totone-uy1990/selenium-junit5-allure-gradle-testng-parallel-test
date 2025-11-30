@@ -1,61 +1,45 @@
-import org.gradle.internal.classpath.Instrumented.systemProperty
-
 plugins {
-    id("java")
+    id 'java'
+    id 'io.qameta.allure' version '2.12.0'
 }
+
+group = 'com.example'
+version = '1.0'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    // JUnit + Cucumber + Platform
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
 
-    // -------------------------------
-    // CUCUMBER + JUNIT PLATFORM ENGINE
-    // -------------------------------
-    testImplementation("io.cucumber:cucumber-core:7.18.1")
+    // Allure
+    testImplementation 'io.qameta.allure:allure-java-commons:2.24.0'
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
 
-    testImplementation("io.cucumber:cucumber-java:7.18.1")
-    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.18.1")
-
-    // -------------------------------
-    // SELENIUM
-    // -------------------------------
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.26.0")
-
-    // -------------------------------
-    // ALLURE + CUCUMBER (JUnit Platform compatible)
-    // -------------------------------
-    testImplementation("io.qameta.allure:allure-cucumber7-jvm:2.29.0")
-
-    // -------------------------------
-    // ASSERTIONS (opcional)
-    // -------------------------------
-    testImplementation("org.assertj:assertj-core:3.26.0")
-
-    // JUnit 5 (para plataforma general)
-    testImplementation("org.junit.platform:junit-platform-suite:1.10.2")
+    // Opcional para WebDriver
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.22.0'
 }
 
-
-tasks.test {
+test {
     useJUnitPlatform()
 
-    // Paralelo para Cucumber (NO JUnit)
-    systemProperty("cucumber.execution.parallel.enabled", "true")
-    systemProperty("cucumber.execution.parallel.config.strategy", "fixed")
-    systemProperty("cucumber.execution.parallel.config.fixed.parallelism", "4")
+    systemProperty "allure.results.directory", "target/allure-results"
 
-    // Carpeta donde Cucumber/Allure escribirá los JSON
-    systemProperty("allure.results.directory", "build/allure-results")
-
-    // Logging básico
     testLogging {
-        events("passed", "failed", "skipped")
+        events "passed", "failed", "skipped"
     }
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }}
+allure {
+    autoconfigure = true
+    aspectjweaver = true
+    version = "2.24.0"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
