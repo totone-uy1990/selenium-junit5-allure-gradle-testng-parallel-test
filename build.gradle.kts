@@ -1,45 +1,65 @@
 plugins {
-    id 'java'
-    id 'io.qameta.allure' version '2.12.0'
+    java
+    id("io.qameta.allure") version "2.12.0"
 }
-
-group = 'com.example'
-version = '1.0'
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    // JUnit + Cucumber + Platform
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'io.cucumber:cucumber-java:7.14.0'
-    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
+// Versión única de Allure (no repitas variables)
+val allureVersion = "2.25.0"
 
-    // Allure
-    testImplementation 'io.qameta.allure:allure-java-commons:2.24.0'
-    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
+// Versión de AspectJ
+val aspectJVersion = "1.9.20.1"
 
-    // Opcional para WebDriver
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.22.0'
+// Configuración del agente aspectj
+val agent: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
 }
 
-test {
+dependencies {
+
+    // ===== ALLURE =====
+    testImplementation(platform("io.qameta.allure:allure-bom:$allureVersion"))
+
+    // Para Cucumber + TestNG
+    testImplementation("io.qameta.allure:allure-cucumber7-jvm")
+
+    // Selenium
+    implementation("org.seleniumhq.selenium:selenium-java:4.38.0")
+
+    // AspectJ weaver
+    agent("org.aspectj:aspectjweaver:$aspectJVersion")
+
+    testImplementation("io.cucumber:cucumber-java:7.15.0")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.15.0")
+
+    testImplementation(platform("io.qameta.allure:allure-bom:2.25.0"))
+    testImplementation("io.qameta.allure:allure-cucumber7-jvm")
+    testImplementation("org.junit.platform:junit-platform-suite:1.10.2")
+
+    implementation("org.seleniumhq.selenium:selenium-java:4.38.0")
+}
+
+
+// Configure javaagent for test execution
+tasks.test {
+
+}
+
+
+tasks.test {
+
+    jvmArgs = listOf(
+        "-javaagent:${agent.singleFile}"
+    )
     useJUnitPlatform()
 
-    systemProperty "allure.results.directory", "target/allure-results"
+    systemProperty("allure.results.directory", "build/allure-results")
 
     testLogging {
-        events "passed", "failed", "skipped"
+        events("passed", "skipped", "failed")
     }
-}
-
-allure {
-    autoconfigure = true
-    aspectjweaver = true
-    version = "2.24.0"
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
 }
