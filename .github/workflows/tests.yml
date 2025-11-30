@@ -31,37 +31,28 @@ jobs:
       - name: Grant execute perm to gradlew
         run: chmod +x gradlew
 
-      # 2. Ejecución de pruebas
       - name: Run tests
-        # IMPORTANTE: continue-on-error permite que el pipeline siga aunque fallen tests
-        # para poder generar el reporte con los errores.
-        continue-on-error: true
-        run: ./gradlew clean test --info
+        run: ./gradlew clean test
 
-      # 3. Preparación del Reporte (Esto reemplaza tu instalación manual de Allure)
-
-      # Paso A: Descargar el historial previo para ver tendencias
-      - name: Get Allure History
+      - name: Load test report history
         uses: actions/checkout@v4
-        if: always() # Se ejecuta siempre, haya pasado o fallado el test
+        if: always()
         continue-on-error: true
         with:
           ref: gh-pages
           path: gh-pages
 
-      # Paso B: Generar el reporte usando la Action oficial (Instala Allure solo)
-      - name: Generate Allure Report
-        uses: simple-elf/allure-report-action@master
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
-          allure_results: build/allure-results
+          gh_pages: gh-pages
           allure_history: allure-history
-          keep_reports: 20 # Guarda los últimos 20 reportes en el historial
+          allure_results: build/allure-results
 
-      # 4. Publicación.
-      - name: Deploy Allure Report to GitHub Pages
-        if: always()
+      - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
+        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
