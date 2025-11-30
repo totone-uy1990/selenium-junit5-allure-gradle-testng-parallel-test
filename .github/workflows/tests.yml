@@ -1,43 +1,92 @@
-name: Run tests and publish the report
-on: [push]
+name: Run UI Tests + Publish Allure Report
 
-permissions: write-all
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 3,9,15,21 * * *"   # 03:00, 09:00, 15:00, 21:00
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Set up JDK
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # --- Mantener el history de Allure --------------------
+      - name: Descargar history previo
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-history
+          path: allure-history
+        continue-on-error: true
+      # -------------------------------------------------------
+
+      - name: Set up JDK 24
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 21
+          distribution: "temurin"
+          java-version: "24"
 
-      - name: Run tests
-        run: SELENIDE_URL="${{ vars.SELENIDE_URL }}" SELENIDE_HEADLESS=true ./gradlew clean test
-
-      - name: Load test report history
-        uses: actions/checkout@v4
-        if: always()
-        continue-on-error: true
+      - name: Cache Gradle
+        uses: actions/cache@v4
         with:
-          ref: gh-pages
-          path: gh-pages
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-      - name: Build test report
-        uses: simple-elf/allure-report-action@v1.10
-        if: always()
+      # -----------------------------
+      # Ejecutar pruebas con Gradle
+      # -----------------------------
+      - name: Run Tests (JUnit Platform + Cucumber)
+        run: |
+          ./gradlew clean test --info \
+            -Dchrome.options="--headless=new --no-sandbox --disable-dev-shm-usage" \
+            -Dfirefox.options="-headless"
+
+      # Carpeta de resultados Allure generada por Gradle:
+      #   build/allure-results
+      # Vamos a copiar el history si existía
+      - name: Copiar history previo al nuevo report
+        run: |
+          mkdir -p build/allure-results/history
+          if [ -d "allure-history/history" ]; then
+            cp -R allure-history/history build/allure-results/
+          fi
+
+      # ------------------------------------------------------------------
+      # Generar el reporte estático de Allure
+      # ------------------------------------------------------------------
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@v1.7
         with:
-          gh_pages: gh-pages
-          allure_history: allure-history
           allure_results: build/allure-results
+          allure_report: allure-report
+          keep_history: true
 
-      - name: Publish test report
+      # Guardar el nuevo history como artifact para próxima ejecución
+      - name: Upload history artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-history
+          path: allure-report/history
+
+      # ------------------------------------------------------------------
+      # Publicar Allure Report en GitHub Pages
+      # ------------------------------------------------------------------
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: allure-report

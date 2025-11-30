@@ -2,7 +2,6 @@ import org.gradle.internal.classpath.Instrumented.systemProperty
 
 plugins {
     id("java")
-    id("io.qameta.allure") version "2.12.0"
 }
 
 repositories {
@@ -15,6 +14,7 @@ dependencies {
     // CUCUMBER + JUNIT PLATFORM ENGINE
     // -------------------------------
     testImplementation("io.cucumber:cucumber-core:7.18.1")
+
     testImplementation("io.cucumber:cucumber-java:7.18.1")
     testImplementation("io.cucumber:cucumber-junit-platform-engine:7.18.1")
 
@@ -31,23 +31,11 @@ dependencies {
     // -------------------------------
     // ASSERTIONS (opcional)
     // -------------------------------
+    testImplementation("org.assertj:assertj-core:3.26.0")
 
     // JUnit 5 (para plataforma general)
     testImplementation("org.junit.platform:junit-platform-suite:1.10.2")
 }
-
-
-
-
-
-allure {
-    version = "2.12.0"
-}
-
-
-
-
-
 
 
 tasks.test {
@@ -70,5 +58,4 @@ tasks.test {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(24))
-    }
-}
+    }}
