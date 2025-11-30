@@ -30,8 +30,7 @@ jobs:
         run: ./gradlew clean test
         continue-on-error: true
 
-      # PASO CLAVE 1: Descargar el reporte anterior
-      # Lo descargamos en una carpeta temporal llamada 'old-pages' para no mezclar
+      # 1. Descargar el reporte anterior en la carpeta 'old-pages'
       - name: Load test report history
         uses: actions/checkout@v4
         if: always()
@@ -40,30 +39,19 @@ jobs:
           ref: gh-pages
           path: old-pages
 
-      # PASO CLAVE 2 (EL QUE FALTABA): Mover el historial viejo a la carpeta de resultados nueva
-      # Allure busca 'allure-results/history'. Si no está ahí, no genera tendencia.
-      - name: Restore Allure History
-        if: always()
-        run: |
-          mkdir -p build/allure-results/history
-          if [ -d "old-pages/history" ]; then
-            cp -R old-pages/history/* build/allure-results/history/
-            echo "Historial copiado exitosamente."
-          else
-            echo "No se encontró historial previo (primera ejecución o rama limpia)."
-          fi
-
-      # PASO 3: Generar el reporte
-      # Nota el uso de @master (más estable)
+      # 2. Generar el reporte
+      # CORRECCIÓN: Le pasamos 'gh_pages: old-pages' para que la acción
+      # sepa de dónde sacar el historial automáticamente.
       - name: Build test report
         uses: simple-elf/allure-report-action@master
         if: always()
         with:
           allure_results: build/allure-results
+          gh_pages: old-pages # <--- ESTO FALTABA o estaba mal configurado
           allure_history: allure-history
           keep_reports: 20
 
-      # PASO 4: Publicar
+      # 3. Publicar
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
