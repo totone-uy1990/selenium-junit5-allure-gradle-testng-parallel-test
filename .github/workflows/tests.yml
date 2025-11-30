@@ -6,9 +6,8 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: "0 3,9,15,21 * * *"   # 00:00, 06:00, 12:00 y 18:00 en Uruguay
+    - cron: "0 3,9,15,21 * * *"
 
-# Permisos necesarios para publicar en GitHub Pages
 permissions:
   contents: write
   pages: write
@@ -18,22 +17,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Configuración del entorno
       - name: Checkout code
         uses: actions/checkout@v4
 
+        # JDK
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21' # Usamos 21 para mejor compatibilidad con Gradle moderno
+          java-version: '21'
 
       - name: Grant execute perm to gradlew
         run: chmod +x gradlew
 
+        # Ejecutar pruebas
       - name: Run tests
+        if: always()
         run: ./gradlew clean test
 
+        # Descargar historial previo de GH Pages
       - name: Load test report history
         uses: actions/checkout@v4
         if: always()
@@ -42,15 +44,18 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Build test report
+        # Construcción del reporte
+      - name: Build Allure Report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
+          allure_results: build/allure-results
           gh_pages: gh-pages
           allure_history: allure-history
-          allure_results: build/allure-results
+          keep_reports: 20
 
-      - name: Publish test report
+        # Publicación
+      - name: Publish report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
