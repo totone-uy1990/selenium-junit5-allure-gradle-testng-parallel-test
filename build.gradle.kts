@@ -45,9 +45,7 @@ allure {
     report {
         version.set("2.29.0") // Versión de la herramienta de reporte (CLI)
     }
-    adapter {
-        autoconfigure.set(false) // Desactivamos la autoconfiguración para que no choque con tu TestRunner
-    }
+
 }
 
 
