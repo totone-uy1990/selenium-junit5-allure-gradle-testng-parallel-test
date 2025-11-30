@@ -44,7 +44,7 @@ dependencies {
 }
 
 
-// Configure javaagent for test execution
+// Configure javaagent for test execution.
 tasks.test {
 
 }
