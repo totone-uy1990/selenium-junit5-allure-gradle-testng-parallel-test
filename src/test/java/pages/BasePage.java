@@ -23,34 +23,31 @@ public class BasePage {
     // --------------------------
     public static void initDriver() {
 
-            options = new ChromeOptions();
-            options.setAcceptInsecureCerts(true);// omision paginas peligrosas
+        options = new ChromeOptions();
+        options.setAcceptInsecureCerts(true);// omision paginas peligrosas
+        options.addArguments("--remote-allow-origins=*");
+        // ----------------------------------------
+        // CONFIGURACIÓN LOCAL vs GITHUB ACTIONS
+        // ----------------------------------------
 
+        // Detectamos si estamos en GitHub Actions buscando la variable "CI"
+        String isCI = System.getenv("CI");
 
-                // ----------------------------------------
-                // CONFIGURACIÓN LOCAL vs GITHUB ACTIONS
-                // ----------------------------------------
-                options.addArguments("--remote-allow-origins=*");
+        if (isCI != null && isCI.equals("true")) {
+            // --- GITHUB ACTIONS (HEADLESS) ---
+            System.out.println("Entorno CI (GitHub) detectado: Ejecutando Headless");
+            options.addArguments("--headless=new"); // Fundamental para servidores sin pantalla
+            options.addArguments("--window-size=1920,1080"); // Simula pantalla Full HD
+            options.addArguments("--no-sandbox"); // Requerido para contenedores Docker/Linux
+            options.addArguments("--disable-dev-shm-usage"); // Evita crash por memoria compartida
+            options.addArguments("--disable-gpu");
+        } else {
+            // --- TU PC LOCAL (CON PANTALLA) ---
+            System.out.println("Entorno LOCAL detectado: Ejecutando navegador visual");
+            options.addArguments("--start-maximized");
+        }
 
-                // Detectamos si estamos en GitHub Actions buscando la variable "CI"
-                String isCI = System.getenv("CI");
-
-                if (isCI != null && isCI.equals("true")) {
-                    // --- GITHUB ACTIONS (HEADLESS) ---
-                    System.out.println("Entorno CI (GitHub) detectado: Ejecutando Headless");
-                    options.addArguments("--headless=new"); // Fundamental para servidores sin pantalla
-                    options.addArguments("--window-size=1920,1080"); // Simula pantalla Full HD
-                    options.addArguments("--no-sandbox"); // Requerido para contenedores Docker/Linux
-                    options.addArguments("--disable-dev-shm-usage"); // Evita crash por memoria compartida
-                    options.addArguments("--disable-gpu");
-                } else {
-                    // --- TU PC LOCAL (CON PANTALLA) ---
-                    System.out.println("Entorno LOCAL detectado: Ejecutando navegador visual");
-                    options.addArguments("--start-maximized");
-                }
-
-                driver.set(new ChromeDriver(options));
-
+        driver.set(new ChromeDriver(options));
 
 
         // Si no estamos en modo headless, aseguramos maximizar (aunque window-size ya ayuda en CI)
@@ -62,19 +59,22 @@ public class BasePage {
     // --------------------------
     // GETTERS
     // --------------------------
-    public static WebDriver getDriver() {
+
+    //otenemos el driver del threadLocal
+    public static WebDriver getDriverFromThread() {
         return driver.get();
     }
 
+   //creamos la espera con el driver
     private WebDriverWait getWait() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        return new WebDriverWait(getDriverFromThread(), Duration.ofSeconds(5));
     }
 
     // --------------------------
     // NAVIGATION
     // --------------------------
     public void navigateTo(String url) {
-        getDriver().get(url);
+        getDriverFromThread().get(url);
     }
 
     // --------------------------
@@ -91,6 +91,7 @@ public class BasePage {
         }
     }
 
+//
     private WebElement find(String locator) {
         return getWait().until(ExpectedConditions.presenceOfElementLocated(getBy(locator)));
     }
@@ -111,6 +112,7 @@ public class BasePage {
     // DROPDOWN methods
     public void selectFromDropdownByValue(String locator, String value) {
         new Select(find(locator)).selectByValue(value);
+
     }
 
     public void selectFromDropdownByIndex(String locator, int index) {

@@ -1,4 +1,4 @@
-package steps;
+package steps.freeRangeTesteingSteps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -15,7 +15,7 @@ public class NavigationSteps {
 
     @Then("The page title should contain {string}")
     public void the_page_title_should_contain(String text) {
-        String title = BasePage.getDriver().getTitle();
+        String title = BasePage.getDriverFromThread().getTitle();
         System.out.println("Thread " + Thread.currentThread().getId() + " → " + title);
 
     }

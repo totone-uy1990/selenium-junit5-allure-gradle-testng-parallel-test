@@ -1,8 +1,8 @@
-package steps;
+package steps.freeRangeTesteingSteps;
 
 import io.cucumber.java.en.*;
-import pages.PaginaCursos;
-import pages.PaginaPrincipal;
+import pages.freeRangeTesting.PaginaCursos;
+import pages.freeRangeTesting.PaginaPrincipal;
 
 public class FreeRangeSteps {
 
