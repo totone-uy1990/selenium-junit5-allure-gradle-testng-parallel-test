@@ -5,22 +5,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
-import java.util.HashMap;
 
 public class BasePage {
-
-    // BrowserStack variables
-    private static final String USERNAME = System.getenv("BS_USER");
-    private static final String ACCESS_KEY = System.getenv("BS_KEY");
-    private static final String REMOTE_URL = "https://" + USERNAME + ":" + ACCESS_KEY + "@hub-cloud.browserstack.com/wd/hub";
 
     // Driver por hilo (clave del paralelismo)
     protected static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -31,24 +22,11 @@ public class BasePage {
     // DRIVER INIT
     // --------------------------
     public static void initDriver() {
-        try {
+
             options = new ChromeOptions();
-            options.setAcceptInsecureCerts(true);
+            options.setAcceptInsecureCerts(true);// omision paginas peligrosas
 
-            if (USERNAME != null && ACCESS_KEY != null) {
-                // ----------------------------------------
-                // CONFIGURACIÓN BROWSERSTACK (Nube)
-                // ----------------------------------------
-                HashMap<String, Object> bstackOptions = new HashMap<>();
-                bstackOptions.put("os", "Windows");
-                bstackOptions.put("osVersion", "11");
-                bstackOptions.put("sessionName", "Parallel Test");
-                options.setCapability("bstack:options", bstackOptions);
-                // Nota: BrowserStack no suele necesitar headless=new explícito si quieres ver el video después
 
-                driver.set(new RemoteWebDriver(new URL(REMOTE_URL), options));
-
-            } else {
                 // ----------------------------------------
                 // CONFIGURACIÓN LOCAL vs GITHUB ACTIONS
                 // ----------------------------------------
@@ -72,11 +50,8 @@ public class BasePage {
                 }
 
                 driver.set(new ChromeDriver(options));
-            }
 
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+
 
         // Si no estamos en modo headless, aseguramos maximizar (aunque window-size ya ayuda en CI)
         if (driver.get() != null) {
@@ -105,6 +80,7 @@ public class BasePage {
     // --------------------------
     // LOCATORS
     // --------------------------
+    //detecta si es css o xpath
     private static By getBy(String locator) {
         locator = locator.trim();
 
