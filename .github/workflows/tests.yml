@@ -4,7 +4,12 @@ on:
   push:
     branches: [ "main", "master" ]
   pull_request:
-
+  # Agregamos la programación de horarios
+  schedule:
+    # Recuerda: Las horas están en UTC (Tiempo Universal Coordinado)
+    - cron: '0 9 * * *'   # Ejecución 1: 09:00 UTC
+    - cron: '0 15 * * *'  # Ejecución 2: 15:00 UTC
+    - cron: '0 21 * * *'  # Ejecución 3: 21:00 UTC
 permissions:
   contents: write
   pages: write
