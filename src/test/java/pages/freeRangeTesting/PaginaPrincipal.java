@@ -1,4 +1,6 @@
-package pages;
+package pages.freeRangeTesting;
+
+import pages.BasePage;
 
 public class PaginaPrincipal extends BasePage {
     //usamos string format (%s)

@@ -1,68 +1,67 @@
-name: Run Selenium + Cucumber Tests
+name: Run tests and publish report
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "main" ]
+# Agregamos la programación de horarios
   schedule:
-    - cron: "0 3,9,15,21 * * *"   # 00:00, 06:00, 12:00 y 18:00 en Uruguay
-
-# Permisos necesarios para publicar en GitHub Pages
+    # Recuerda: Las horas están en UTC (Tiempo Universal Coordinado)
+    - cron: '0 9 * * *'   # Ejecución 1: 09:00 UTC
+    - cron: '0 15 * * *'  # Ejecución 2: 15:00 UTC
+    - cron: '0 21 * * *'  # Ejecución 3: 21:00 UTC
 permissions:
   contents: write
   pages: write
+  id-token: write
 
 jobs:
-  test-and-report:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Configuración del entorno
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21' # Usamos 21 para mejor compatibilidad con Gradle moderno
+          java-version: '21'
 
-      - name: Grant execute perm to gradlew
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 2. Ejecución de pruebas
       - name: Run tests
-        # IMPORTANTE: continue-on-error permite que el pipeline siga aunque fallen tests
-        # para poder generar el reporte con los errores.
+        run: ./gradlew clean test
         continue-on-error: true
-        run: ./gradlew clean test --info
 
-      # 3. Preparación del Reporte (Esto reemplaza tu instalación manual de Allure)
-
-      # Paso A: Descargar el historial previo para ver tendencias
-      - name: Get Allure History
+      # 1. Descargar el reporte anterior en la carpeta 'old-pages'
+      - name: Load test report history
         uses: actions/checkout@v4
-        if: always() # Se ejecuta siempre, haya pasado o fallado el test
+        if: always()
         continue-on-error: true
         with:
           ref: gh-pages
-          path: gh-pages
+          path: old-pages
 
-      # Paso B: Generar el reporte usando la Action oficial (Instala Allure solo)
-      - name: Generate Allure Report
+      # 2. Generar el reporte
+      # CORRECCIÓN: Le pasamos 'gh_pages: old-pages' para que la acción
+      # sepa de dónde sacar el historial automáticamente.
+      - name: Build test report
         uses: simple-elf/allure-report-action@master
         if: always()
         with:
           allure_results: build/allure-results
+          gh_pages: old-pages # <--- ESTO FALTABA o estaba mal configurado
           allure_history: allure-history
-          keep_reports: 20 # Guarda los últimos 20 reportes en el historial
+          keep_reports: 20
 
-      # 4. Publicación.
-      - name: Deploy Allure Report to GitHub Pages
-        if: always()
+      # 3. Publicar
+      - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
+        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+          commit_message: ${{ github.event.head_commit.message }}

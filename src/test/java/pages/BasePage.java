@@ -13,9 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class BasePage {
 
@@ -144,29 +142,16 @@ public class BasePage {
     }
 
     public int dropdownSize(String locator) {
-
         return new Select(find(locator)).getOptions().size();
     }
 
     public void selectFromDropDown(String locator, String text) {
-
         new Select(find(locator)).selectByVisibleText(text);
     }
 
-    public List<String> getDropDownValues(String locator) {
-        Select dropdown = new Select(find(locator));
-        List<String> listaOpciones = new ArrayList<>();
-        List<WebElement> listaValores = dropdown.getOptions();
-        for (WebElement element : listaValores) {
-            listaOpciones.add(element.toString());
-        }
-        return listaOpciones;
-    }
-
-
     // --------------------------
-// CLOSE DRIVER
-// --------------------------
+    // CLOSE DRIVER
+    // --------------------------
     public static void closeDriver() {
         if (driver.get() != null) {
             driver.get().quit();

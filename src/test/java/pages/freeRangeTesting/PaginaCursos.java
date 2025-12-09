@@ -1,4 +1,6 @@
-package pages;
+package pages.freeRangeTesting;
+
+import pages.BasePage;
 
 public class PaginaCursos extends BasePage {
     String sectionLink = "//h3[normalize-space()='Introducción al Testing de Software']";
