@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","11888","Open Google","","Mon Dec 15 15:52:36 UTC 2025","passed","Mon Dec 15 15:52:48 UTC 2025","","Navigation tests","Open Google",""
+"","10","","","Mon Dec 15 15:52:36 UTC 2025","passed","Mon Dec 15 15:52:36 UTC 2025","","Navigation bar","",""
+"","2118","Open DuckDuckGo","","Mon Dec 15 15:52:49 UTC 2025","passed","Mon Dec 15 15:52:51 UTC 2025","","Navigation tests","Open DuckDuckGo",""
+"","1094","Open Bing","","Mon Dec 15 15:52:48 UTC 2025","passed","Mon Dec 15 15:52:49 UTC 2025","","Navigation tests","Open Bing",""
+"","15706","Coureses are precented to potential customers","","Mon Dec 15 15:52:36 UTC 2025","passed","Mon Dec 15 15:52:52 UTC 2025","","Navigation bar","Coureses are precented to potential customers",""
+"","13807","Open YouTube","","Mon Dec 15 15:52:36 UTC 2025","passed","Mon Dec 15 15:52:50 UTC 2025","","Navigation tests","Open YouTube",""
