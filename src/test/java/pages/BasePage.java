@@ -65,9 +65,9 @@ public class BasePage {
         return driver.get();
     }
 
-   //creamos la espera con el driver
+    //creamos la espera con el driver
     private WebDriverWait getWait() {
-        return new WebDriverWait(getDriverFromThread(), Duration.ofSeconds(5));
+        return new WebDriverWait(getDriverFromThread(), Duration.ofSeconds(10));
     }
 
     // --------------------------
@@ -91,7 +91,7 @@ public class BasePage {
         }
     }
 
-//
+    //
     private WebElement find(String locator) {
         return getWait().until(ExpectedConditions.presenceOfElementLocated(getBy(locator)));
     }
@@ -107,6 +107,7 @@ public class BasePage {
         WebElement element = find(locator);
         element.clear();
         element.sendKeys(keysToSend);
+        element.clear();
     }
 
     // DROPDOWN methods
@@ -127,6 +128,19 @@ public class BasePage {
         new Select(find(locator)).selectByVisibleText(text);
     }
 
+
+    //isDisplayed:
+    public boolean elementIsDisplayed(String locator) {
+        if (find(locator).isDisplayed()) {
+            System.out.println("El elemento es visible");
+        } else {
+            System.out.println("El elemento no es visible");
+
+        }
+        return find(locator).isDisplayed();
+    }
+
+
     // --------------------------
     // CLOSE DRIVER
     // --------------------------
@@ -136,4 +150,6 @@ public class BasePage {
             driver.remove(); // ← CLAVE PARA PARALELISMO REAL
         }
     }
+
+
 }

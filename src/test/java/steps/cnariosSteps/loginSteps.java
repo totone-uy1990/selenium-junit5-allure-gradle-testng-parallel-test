@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.NoSuchElementException;
 import pages.cnarios.LoginPageTest;
 
 public class loginSteps {
@@ -12,11 +13,18 @@ public class loginSteps {
     @Given("the user is on the Cnarios test_login page {string}")
     public void navigatetoLoginFlow(String url) {
         loginFlow.navigateTo(url);
+
     }
 
     @When("the user enters the username {string}")
     public void fillingUsernameField(String word) {
-        loginFlow.writeUsernameField(word);
+        try {
+            loginFlow.writeUsernameField(word);
+        } catch (NoSuchElementException e) {
+            String errorMessage = "ERROR: No se pudo encontrar el WebElement";
+            throw new RuntimeException(errorMessage, e);
+        }
+
     }
 
     @And("the user enters the password {string}")
@@ -51,18 +59,9 @@ public class loginSteps {
     }
 
 
-
     @When("the user leaves the password field empty")
     public void theUserLeavesThePasswordFieldEmpty() {
     }
-
-
-
-    @When("clicks on the login button")
-    public void clicksOnTheLoginButton() {
-
-    }
-
 
 
     @Then("the user should see a validation message {string} under the username field")
@@ -71,13 +70,10 @@ public class loginSteps {
     }
 
 
-
     @Then("the user should see a validation message {string} under the password field")
     public void theUserShouldSeeAValidationMessageUnderThePasswordField(String message) {
 
     }
-
-
 
 
 }
