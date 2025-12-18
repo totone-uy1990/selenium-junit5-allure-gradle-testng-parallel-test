@@ -1,19 +1,22 @@
 package steps.cnariosSteps;
 
+import assertions.CustomAssertions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.NoSuchElementException;
+import org.testng.Assert;
 import pages.cnarios.LoginPageTest;
 
 public class loginSteps {
     LoginPageTest loginFlow = new LoginPageTest();
+    CustomAssertions verify = new CustomAssertions();
+
 
     @Given("the user is on the Cnarios test_login page {string}")
     public void navigatetoLoginFlow(String url) {
         loginFlow.navigateTo(url);
-
     }
 
     @When("the user enters the username {string}")
@@ -37,14 +40,15 @@ public class loginSteps {
         loginFlow.clickButton();
     }
 
+
     @Then("the user should see an error message saying {string}")
-    public void validatingErrorMessageLogin() {
+    public void validatingErrorMessageLogin(String message) {
 
     }
 
     @Then("the user should be redirected to the {string} page")
-    public void validatingWeAreDashBoardPanel(String word) {
-
+    public void validatingWeAreDashBoardPanel(String expectedMessage) {
+        verify.assertContainsText(loginFlow.dashBoardElement(),expectedMessage,"Mensaje de Admin" );
     }
 
     @And("the user should see a welcome message containing {string}")

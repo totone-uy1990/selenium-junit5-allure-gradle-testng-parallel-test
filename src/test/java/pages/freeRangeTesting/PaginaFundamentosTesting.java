@@ -1,5 +1,6 @@
 package pages.freeRangeTesting;
 
+import org.openqa.selenium.WebElement;
 import pages.BasePage;
 
 public class PaginaFundamentosTesting extends BasePage {
@@ -10,4 +11,8 @@ public class PaginaFundamentosTesting extends BasePage {
     }
 
 
+    @Override
+    protected WebElement getElement(String locator) {
+        return getWebElement(locator);
+    }
 }

@@ -1,5 +1,6 @@
 package pages.freeRangeTesting;
 
+import org.openqa.selenium.WebElement;
 import pages.BasePage;
 
 public class PaginaPrincipal extends BasePage {
@@ -18,5 +19,9 @@ public class PaginaPrincipal extends BasePage {
         clickElement(xpathSection);
     }
 
+    @Override
+    protected WebElement getElement(String locator) {
+        return getWebElement(locator);
+    }
 
 }

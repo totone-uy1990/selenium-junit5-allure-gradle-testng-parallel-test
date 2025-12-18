@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.internal.shadowed.jackson.databind.ser.Serializers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class BasePage {
+public abstract class BasePage {
+
+    protected abstract WebElement getElement(String locator);
 
     // Driver por hilo (clave del paralelismo)
     protected static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -149,6 +152,15 @@ public class BasePage {
             driver.get().quit();
             driver.remove(); // ← CLAVE PARA PARALELISMO REAL
         }
+    }
+
+    public WebElement getWebElement(String locator) {
+        return find(locator);
+
+    }
+
+    public String getTextOfWebElement(String locator) {
+        return find(locator).getText();
     }
 
 
