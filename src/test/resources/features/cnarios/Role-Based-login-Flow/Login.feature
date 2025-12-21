@@ -13,9 +13,9 @@ Feature: Login Flow Challenge
     And the user enters the password "admin123"
     And clicks on the login button
     Then the user should be redirected to the "Dashboard" page
-    #And the user should see a welcome message containing "Welcome"
+    And the user should see a welcome message containing "Welcome"
 
-  #@regression @negative_testing
+  @regression @negative_testing
   #Scenario Outline: Failed login with invalid credentials
   #  When the user enters the username "<username>"
    # And the user enters the password "<password>"

@@ -5,13 +5,13 @@ import org.openqa.selenium.WebElement;
 import pages.BasePage;
 
 public class LoginPageTest extends BasePage {
-    public String TestLoginFlow = "https://www.cnarios.com/challenges/login-flow";
-    public String userNameField = "(//input[contains(@class,'MuiOutlinedInput-input')])[1]";
-
-    String paswordField = "(//input[contains(@class,'MuiOutlinedInput-input')])[2]";
-    String loginButon = "button.MuiButton-containedPrimary.MuiButton-fullWidth";
-    String messageAdmin = "(//div[contains(@class,'MuiAlert-message css-127h8j3')])[2]";
-    String DashBoardLocator = "//p[contains(text(), 'Dashboard')]";
+    private String TestLoginFlow = "https://www.cnarios.com/challenges/login-flow";
+    private String userNameField = "(//input[contains(@class,'MuiOutlinedInput-input')])[1]";
+    private String paswordField = "(//input[contains(@class,'MuiOutlinedInput-input')])[2]";
+    private String loginButon = "button.MuiButton-containedPrimary.MuiButton-fullWidth";
+    private String messageAdmin = "(//div[contains(@class,'MuiAlert-message css-127h8j3')])[2]";
+    private String DashBoardLocator = "//p[contains(text(), 'Dashboard')]";
+    private String welcomeMessage = "//h5[contains(text(), 'Welcome')]";
 
     public void navigateToTestLogin() {
         navigateTo(TestLoginFlow);
@@ -43,6 +43,10 @@ public class LoginPageTest extends BasePage {
 
     public WebElement dashBoardElement() {
         return getElement(DashBoardLocator);
+    }
+
+    public WebElement getMessageWelcome() {
+        return getElement(welcomeMessage);
     }
 
     @Override

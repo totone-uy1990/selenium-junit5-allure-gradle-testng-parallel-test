@@ -1,7 +1,10 @@
 package pages;
 
+import customExceptions.AutomationException;
+import customExceptions.FrameworkException;
 import io.qameta.allure.internal.shadowed.jackson.databind.ser.Serializers;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -94,14 +97,24 @@ public abstract class BasePage {
         }
     }
 
-    //
     private WebElement find(String locator) {
-        return getWait().until(ExpectedConditions.presenceOfElementLocated(getBy(locator)));
+        try {
+            // Selenium intenta buscar el elemento
+            return getWait()
+                    .until(ExpectedConditions
+                            .presenceOfElementLocated
+                                    (getBy(locator)));
+        } catch (org.openqa.selenium.TimeoutException | org.openqa.selenium.NoSuchElementException e) {
+            // Capturamos el error técnico de Selenium y lo "envolvemos" en tu FrameworkException
+            throw new FrameworkException("No se pudo encontrar el elemento con el localizador: "
+                    + locator + " tras el tiempo de espera configurado.", e);
+        }
     }
 
     // --------------------------
     // ACTIONS
     // --------------------------
+// En BasePage.java
     public void clickElement(String locator) {
         find(locator).click();
     }
@@ -110,7 +123,6 @@ public abstract class BasePage {
         WebElement element = find(locator);
         element.clear();
         element.sendKeys(keysToSend);
-        element.clear();
     }
 
     // DROPDOWN methods

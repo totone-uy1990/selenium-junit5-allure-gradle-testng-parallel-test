@@ -6,12 +6,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.NoSuchElementException;
-import org.testng.Assert;
 import pages.cnarios.LoginPageTest;
 
 public class loginSteps {
-    LoginPageTest loginFlow = new LoginPageTest();
-    CustomAssertions verify = new CustomAssertions();
+    final private LoginPageTest loginFlow = new LoginPageTest();
+    final private CustomAssertions verify = new CustomAssertions();
 
 
     @Given("the user is on the Cnarios test_login page {string}")
@@ -32,12 +31,12 @@ public class loginSteps {
 
     @And("the user enters the password {string}")
     public void fillingPaswordField(String word) {
+
         loginFlow.writePaswordField(word);
     }
 
     @And("clicks on the login button")
-    public void clickingButtonLogin() {
-        loginFlow.clickButton();
+    public void clickingButtonLogin() {loginFlow.clickButton();
     }
 
 
@@ -48,11 +47,18 @@ public class loginSteps {
 
     @Then("the user should be redirected to the {string} page")
     public void validatingWeAreDashBoardPanel(String expectedMessage) {
-        verify.assertContainsText(loginFlow.dashBoardElement(),expectedMessage,"Mensaje de Admin" );
+        verify.assertContainsText
+                (loginFlow.dashBoardElement(),
+                        expectedMessage,
+                        "Mensaje de Admin");
     }
 
     @And("the user should see a welcome message containing {string}")
-    public void verifyWelcomeMessage(String word) {
+    public void verifyWelcomeMessage(String expectedMessage) {
+        verify.assertContainsText
+                (loginFlow.getMessageWelcome(),
+                        expectedMessage,
+                        "Mensaje de bienvenida");
 
     }
 

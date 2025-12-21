@@ -1,5 +1,7 @@
 package assertions;
 
+import com.google.common.base.VerifyException;
+import customExceptions.VerificationException;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -7,37 +9,53 @@ import org.testng.Reporter;
 public class CustomAssertions {
 
     //elemento visible
-    public  void AssertElementIsDisplayed(WebElement webElement, String elementName) {
+    public void AssertElementIsDisplayed(WebElement webElement, String elementName) {
 
         try {
+            // Usamos el Assert de TestNG internamente
             Assert.assertTrue(webElement.isDisplayed(),
                     elementName + "deberia estar visible");
-            Reporter.log("[INFO] " + elementName + " Esta visible");
-        } catch (Exception e) {
-            Reporter.log("[ERROR] " + elementName + " NO está visible " + e.getMessage(), true);
-            e.getMessage();
+            // Reporter.log("[INFO] " + elementName + " Esta visible");
+        } catch (AssertionError e) {
+            // Si falla, lanzamos nuestra excepción de NEGOCIO con un mensaje claro
+
+            throw new VerificationException("ERROR DE NEGOCIO: El elemento '"
+                    + elementName + "' no se mostró en pantalla.");
         }
     }
 
     public void assertTextEquals(WebElement element, String expectedText, String fieldName) {
         String actualText = element.getText().trim();
-        Assert.assertEquals(actualText, expectedText,
-                "Texto en " + fieldName + " no coincide. Esperado: '" +
-                        expectedText + "', Actual: '" + actualText + "'");
+        try {
+            Assert.assertEquals(actualText, expectedText);
+        } catch (AssertionError e) {
+            throw new VerificationException("FALLO DE VALIDACIÓN en " + fieldName +
+                    ": Se esperaba '"
+                    + expectedText
+                    + "' pero se encontró '"
+                    + actualText + "'");
+        }
     }
 
-
-    public static void assertContainsText(WebElement element, String expectedText, String fieldName) {
+    public void assertContainsText(WebElement element, String expectedText, String fieldName) {
         String actualText = element.getText();
-        Assert.assertTrue(actualText.contains(expectedText),
-                fieldName + " debería contener '" + expectedText +
-                        "', pero contiene: '" + actualText + "'");
+        try {
+            Assert.assertTrue(actualText.contains(expectedText));
+        } catch (AssertionError e) {
+            throw new VerificationException("EL CONTENIDO NO COINCIDE en "
+                    + fieldName +
+                    ": Se buscaba '"
+                    + expectedText
+                    + "' dentro de '"
+                    + actualText + "'");
+        }
     }
 
     public static void assertElementIsEnabled(WebElement element, String elementName) {
         Assert.assertTrue(element.isEnabled(),
                 elementName + " debería estar habilitado");
     }
+
     public static void assertElementIsSelected(WebElement element, String elementName) {
         Assert.assertTrue(element.isSelected(),
                 elementName + " debería estar seleccionado");
@@ -59,9 +77,6 @@ public class CustomAssertions {
             softAssert.assertAll();
         }
     }
-
-
-
 
 
 }
