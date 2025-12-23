@@ -174,15 +174,6 @@ public abstract class BasePage {
     }
 
 
-    // --------------------------
-    // CLOSE DRIVER
-    // --------------------------
-    public static void closeDriver() {
-        if (driver.get() != null) {
-            driver.get().quit();
-            driver.remove(); // ← CLAVE PARA PARALELISMO REAL
-        }
-    }
 
     public WebElement getWebElement(String locator) {
         return find(locator);
@@ -193,5 +184,13 @@ public abstract class BasePage {
         return find(locator).getText();
     }
 
-
+    // --------------------------
+    // CLOSE DRIVER
+    // --------------------------
+    public static void closeDriver() {
+        if (driver.get() != null) {
+            driver.get().quit();
+            driver.remove(); // ← CLAVE PARA PARALELISMO REAL
+        }
+    }
 }
