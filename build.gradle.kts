@@ -1,6 +1,5 @@
 plugins {
     id("java")
-
     id("io.qameta.allure") version "2.12.0" // Plugin maneja el agente automáticamente
 }
 
@@ -35,8 +34,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.1")
 
-
-
     // Allure
     testImplementation(platform("io.qameta.allure:allure-bom:$allureVersion"))
     testImplementation("io.qameta.allure:allure-cucumber7-jvm")
@@ -62,10 +59,6 @@ tasks.withType<Test> {
 }
 
 
-
-
-
-// Asegúrate de que este bloque exista en tu build.gradle.kts
 java {
     toolchain {
         // Asegúrate de tener la versión correcta de Java aquí (e.g., 21, 17)
@@ -77,8 +70,6 @@ java {
 
 tasks.test {
     useJUnitPlatform()
-
-
     // Configuración para que Allure sepa dónde dejar los resultados
     systemProperty("allure.results.directory", "build/allure-results")
 

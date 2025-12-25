@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class BasePage {
-
+//metodo obligatorio para todos los page object
     protected abstract WebElement getElement(String locator);
 
     // Driver por hilo (clave del paralelismo)
@@ -58,11 +58,6 @@ public abstract class BasePage {
 
         driver.set(new ChromeDriver(options));
 
-
-        // Si no estamos en modo headless, aseguramos maximizar (aunque window-size ya ayuda en CI)
-        if (driver.get() != null) {
-            // driver.get().manage().window().maximize(); // Opcional, ya lo cubrimos con los argumentos arriba
-        }
     }
 
     // --------------------------

@@ -59,10 +59,7 @@ public class CustomAssertions {
     // --------------------------
     // DROPDOWN
     // --------------------------
-    public void assertEqualsDropDownList(
-            String dropdownName,
-            Select dropdownSelect,
-            List<String> expectedList) {
+    public void assertEqualsDropDownList(String dropdownName, Select dropdownSelect, List<String> expectedList) {
 
         List<String> actualList = dropdownSelect.getOptions()
                 .stream()
@@ -76,7 +73,6 @@ public class CustomAssertions {
                 "El dropdown '" + dropdownName + "' no coincide con la lista esperada"
         );
     }
-
     // --------------------------
     // REGLAS DE NEGOCIO
     // --------------------------
