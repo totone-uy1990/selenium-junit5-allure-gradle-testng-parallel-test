@@ -7,28 +7,33 @@ Feature: Login Flow Challenge
   Background:
     Given the user is on the Cnarios test_login page "https://www.cnarios.com/challenges/login-flow"
 
-  @smoke @happy_path
+
   Scenario: Successful login with valid credentials
-    When the user enters the username "admin"
-    And the user enters the password "admin123"
+    When the user enters his credentials:
+      |username|password|
+      |admin   |admin123|
     And clicks on the login button
     Then the user should be redirected to the "Dashboard" page
-    And the user should see a welcome message containing "Welcomes"
+    And the user should see a welcome message containing "Welcome"
 
-#  @regression @negative_testing
+  #@regression @negative_testing @ui
   #Scenario Outline: Failed login with invalid credentials
-  #  When the user enters the username "<username>"
-   # And the user enters the password "<password>"
-    #And clicks on the login button
+    #When the user enters the username "<username>"
+  #  And the user enters the password "<password>"
+   # And clicks on the login button
     #Then the user should see an error message saying "<error_message>"
 
-   # Examples:
-     # | username       | password      | error_message       |
-     # | wrongUser      | admin123      | Invalid username    |
+  #  Examples:
+   #   | username       | password      | error_message       |
+   #   |   EMPTY        |  EMPTY        | Both fields are required.|
+    #  |   EMPTY        | admin123      | Both fields are required.|
      # | admin          | wrongPass     | Invalid password    |
-     # | wrongUser      | wrongPass     | Invalid credentials |
+      #| admin          | EMPTY         | Invalid password    |
+      #| user           | wrongPass     | Invalid credentials |
 
-  #@ui @validation
+
+
+  #@ui
   #Scenario: Login validation with empty fields
   #  When the user leaves the username field empty
    # And the user leaves the password field empty

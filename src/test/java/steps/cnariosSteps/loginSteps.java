@@ -5,8 +5,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.NoSuchElementException;
 import pages.cnarios.LoginPageTest;
+import io.cucumber.datatable.DataTable;
+import steps.pojos.LoginData;
 
 public class loginSteps {
     final private LoginPageTest loginFlow = new LoginPageTest();
@@ -18,31 +19,24 @@ public class loginSteps {
         loginFlow.navigateTo(url);
     }
 
-    @When("the user enters the username {string}")
-    public void fillingUsernameField(String word) {
-        try {
-            loginFlow.writeUsernameField(word);
-        } catch (NoSuchElementException e) {
-            String errorMessage = "ERROR: No se pudo encontrar el WebElement";
-            throw new RuntimeException(errorMessage, e);
-        }
 
-    }
+    @When("the user enters his credentials:")
+    public void fillingUsernameField(DataTable table) {
+        LoginData data = table.asList(LoginData.class).get(0);
+        loginFlow.writeUsernameField(data.getUsername());
+        loginFlow.writePaswordField(data.getPassword());
 
-    @And("the user enters the password {string}")
-    public void fillingPaswordField(String word) {
-
-        loginFlow.writePaswordField(word);
     }
 
     @And("clicks on the login button")
-    public void clickingButtonLogin() {loginFlow.clickButton();
+    public void clickingButtonLogin() {
+        loginFlow.clickButton();
     }
 
 
     @Then("the user should see an error message saying {string}")
     public void validatingErrorMessageLogin(String message) {
-
+        verify.assertTextEquals(loginFlow.getMessageWelcome(), message);
     }
 
     @Then("the user should be redirected to the {string} page")
@@ -84,6 +78,9 @@ public class loginSteps {
     public void theUserShouldSeeAValidationMessageUnderThePasswordField(String message) {
 
     }
+
+
+    //metodo adicional para campos vacios
 
 
 }

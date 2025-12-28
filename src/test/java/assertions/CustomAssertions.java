@@ -21,21 +21,26 @@ public class CustomAssertions {
     // --------------------------
     // TEXTO EXACTO
     // --------------------------
-    public void assertTextEquals(WebElement element, String expectedText, String fieldName) {
+    public void assertTextEquals(WebElement element, String expectedText) {
+        String actualText = element.getText().trim();
         Assertions.assertEquals(
                 expectedText,
-                element.getText().trim(),
-                "Fallo de negocio en '" + fieldName + "'"
-        );
+                actualText,
+                "El texto real [" + actualText +
+                        "] no coincide con el esperado [" + expectedText + "]");
     }
+
 
     // --------------------------
     // TEXTO CONTENIDO
     // --------------------------
-    public void assertContainsText(WebElement element, String expectedText, String fieldName) {
+    public static void assertContainsText(WebElement element, String expectedText, String fieldName) {
+        String actualText = element.getText();
         Assertions.assertTrue(
-                element.getText().contains(expectedText),
-                "El campo '" + fieldName + "' no contiene el texto esperado: " + expectedText
+                actualText.contains(expectedText),
+                "El campo '" + fieldName +
+                        " contiene [" + actualText +
+                        "] pero se esperaba que contenga [" + expectedText + "]"
         );
     }
 
@@ -73,6 +78,7 @@ public class CustomAssertions {
                 "El dropdown '" + dropdownName + "' no coincide con la lista esperada"
         );
     }
+
     // --------------------------
     // REGLAS DE NEGOCIO
     // --------------------------
@@ -80,3 +86,4 @@ public class CustomAssertions {
         Assertions.fail(message);
     }
 }
+

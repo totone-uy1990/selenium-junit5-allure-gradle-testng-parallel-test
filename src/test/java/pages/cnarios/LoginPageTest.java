@@ -18,6 +18,7 @@ public class LoginPageTest extends BasePage {
     }
 
     public void writeUsernameField(String words) throws NoSuchElementException {
+
         write(userNameField, words);
     }
 
@@ -53,6 +54,9 @@ public class LoginPageTest extends BasePage {
     protected WebElement getElement(String locator) {
         return getWebElement(locator);
     }
+
+
+
 
 
 }

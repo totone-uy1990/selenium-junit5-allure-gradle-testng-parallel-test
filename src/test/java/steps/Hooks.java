@@ -39,7 +39,6 @@ public class Hooks {
 
     @After
     public void teardown(Scenario scenario) {
-
         if (scenario.isFailed()) {
 
             WebDriver driver = BasePage.getDriverFromThread();
@@ -52,7 +51,7 @@ public class Hooks {
             }
         }
 
-        BasePage.closeDriver();
+       // BasePage.closeDriver();
     }
 
 

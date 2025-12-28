@@ -120,7 +120,7 @@ public abstract class BasePage {
     public void write(String locator, String keysToSend) {
         WebElement element = find(locator);
         element.clear();
-        element.sendKeys(keysToSend);
+        element.sendKeys(normalizeText(keysToSend));
     }
 
     // DROPDOWN methods
@@ -188,4 +188,18 @@ public abstract class BasePage {
             driver.remove(); // ← CLAVE PARA PARALELISMO REAL
         }
     }
+
+//normalizador de textos
+    private String normalizeText(String value) {
+        if (value == null) {
+            return null;   // o "" según tu criterio
+        }
+        String actualText = value.trim().replace("\"", "");
+        return switch (actualText) {
+            case "EMPTY" -> "";
+            case "SPACE" -> " ";
+            default -> actualText;
+        };
+    }
+
 }
