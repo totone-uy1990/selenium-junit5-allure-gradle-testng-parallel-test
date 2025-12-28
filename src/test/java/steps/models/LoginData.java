@@ -1,4 +1,4 @@
-package steps.pojos;
+package steps.models;
 
 import lombok.Data;
 @Data

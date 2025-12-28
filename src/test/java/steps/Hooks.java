@@ -18,24 +18,6 @@ public class Hooks {
         BasePage.initDriver();
     }
 
-    @AfterStep
-    public void attachment(Scenario scenario) {
-        if (scenario.isFailed()) {
-            WebDriver driver = BasePage.getDriverFromThread();
-            Allure.addAttachment(
-                    "URL",
-                    "text/plain",
-                    driver.getCurrentUrl()
-            );
-            Allure.addAttachment(
-                    "Page source",
-                    "text/html",
-                    driver.getPageSource(),
-                    ".html"
-            );
-        }
-    }
-
 
     @After
     public void teardown(Scenario scenario) {
@@ -48,10 +30,27 @@ public class Hooks {
                         .getScreenshotAs(OutputType.BYTES);
 
                 AllureUtils.attachScreenshot(screenshot);
+
+                Allure.addAttachment(
+                        "URL",
+                        "text/plain",
+                        driver.getCurrentUrl()
+                );
+                Allure.addAttachment(
+                        "Page source",
+                        "text/html",
+                        driver.getPageSource(),
+                        ".html"
+                );
+
             }
+
+
+
+
         }
 
-       // BasePage.closeDriver();
+        BasePage.closeDriver();
     }
 
 

@@ -7,7 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.cnarios.LoginPageTest;
 import io.cucumber.datatable.DataTable;
-import steps.pojos.LoginData;
+import steps.models.LoginData;
 
 public class loginSteps {
     final private LoginPageTest loginFlow = new LoginPageTest();
