@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class BasePage {
-//metodo obligatorio para todos los page object
+    //metodo obligatorio para todos los page object
     protected abstract WebElement getElement(String locator);
 
     // Driver por hilo (clave del paralelismo)
@@ -51,7 +51,7 @@ public abstract class BasePage {
             options.addArguments("--disable-dev-shm-usage"); // Evita crash por memoria compartida
             options.addArguments("--disable-gpu");
         } else {
-            // --- TU PC LOCAL (CON PANTALLA) ---
+            // ---PC LOCAL (CON PANTALLA) ---
             System.out.println("Entorno LOCAL detectado: Ejecutando navegador visual");
             options.addArguments("--start-maximized");
         }
@@ -169,7 +169,6 @@ public abstract class BasePage {
     }
 
 
-
     public WebElement getWebElement(String locator) {
         return find(locator);
 
@@ -189,7 +188,8 @@ public abstract class BasePage {
         }
     }
 
-//normalizador de textos
+
+    //normalizador de textos
     private String normalizeText(String value) {
         if (value == null) {
             return null;   // o "" según tu criterio

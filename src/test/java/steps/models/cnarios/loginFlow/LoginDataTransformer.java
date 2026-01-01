@@ -1,4 +1,4 @@
-package steps.models;
+package steps.models.cnarios.loginFlow;
 
 import io.cucumber.java.DataTableType;
 

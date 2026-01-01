@@ -22,15 +22,11 @@ public class Hooks {
     @After
     public void teardown(Scenario scenario) {
         if (scenario.isFailed()) {
-
             WebDriver driver = BasePage.getDriverFromThread();
             if (driver != null) {
-
                 byte[] screenshot = ((TakesScreenshot) driver)
                         .getScreenshotAs(OutputType.BYTES);
-
                 AllureUtils.attachScreenshot(screenshot);
-
                 Allure.addAttachment(
                         "URL",
                         "text/plain",
@@ -42,12 +38,7 @@ public class Hooks {
                         driver.getPageSource(),
                         ".html"
                 );
-
             }
-
-
-
-
         }
 
         BasePage.closeDriver();

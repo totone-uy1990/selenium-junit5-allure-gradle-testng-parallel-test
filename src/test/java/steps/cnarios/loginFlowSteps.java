@@ -1,4 +1,4 @@
-package steps.cnariosSteps;
+package steps.cnarios;
 
 import assertions.CustomAssertions;
 import io.cucumber.java.en.And;
@@ -6,13 +6,12 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.cnarios.LoginPageTest;
-import io.cucumber.datatable.DataTable;
-import steps.models.LoginData;
+import steps.models.cnarios.loginFlow.LoginData;
 
-public class loginSteps {
+public class loginFlowSteps {
     final private LoginPageTest loginFlow = new LoginPageTest();
     final private CustomAssertions verify = new CustomAssertions();
-
+    private LoginData data;
 
     @Given("the user is on the Cnarios test_login page {string}")
     public void navigatetoLoginFlow(String url) {
@@ -21,10 +20,16 @@ public class loginSteps {
 
 
     @When("the user enters his credentials:")
-    public void fillingUsernameField(DataTable table) {
-        LoginData data = table.asList(LoginData.class).get(0);
+    public void fillingUsernameField(LoginData data) {
+        this.data = data;
         loginFlow.writeUsernameField(data.getUsername());
         loginFlow.writePaswordField(data.getPassword());
+
+        /*forma antigua:
+        LoginData data = table  .asList(LoginData.class).get(0);
+        loginFlow.writeUsernameField(data.getUsername());
+        loginFlow.writePaswordField(data.getPassword());
+    */
 
     }
 
