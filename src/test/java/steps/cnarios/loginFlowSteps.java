@@ -7,11 +7,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.cnarios.LoginPageTest;
 import steps.models.cnarios.loginFlow.LoginData;
+import steps.models.cnarios.loginFlow.LoginDataTransformer;
 
 public class loginFlowSteps {
     final private LoginPageTest loginFlow = new LoginPageTest();
     final private CustomAssertions verify = new CustomAssertions();
-    private LoginData data;
+
 
     @Given("the user is on the Cnarios test_login page {string}")
     public void navigatetoLoginFlow(String url) {
@@ -20,10 +21,10 @@ public class loginFlowSteps {
 
 
     @When("the user enters his credentials:")
-    public void fillingUsernameField(LoginData data) {
-        this.data = data;
-        loginFlow.writeUsernameField(data.getUsername());
-        loginFlow.writePaswordField(data.getPassword());
+    public void fillingUsernameField(LoginData loginData) {
+
+        loginFlow.writeUsernameField(loginData.getUsername());
+        loginFlow.writePaswordField(loginData.getPassword());
 
         /*forma antigua:
         LoginData data = table  .asList(LoginData.class).get(0);
