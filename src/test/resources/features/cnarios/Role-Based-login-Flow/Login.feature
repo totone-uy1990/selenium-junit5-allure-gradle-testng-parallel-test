@@ -1,4 +1,4 @@
-# language: en
+
 Feature: Login Flow Challenge
   As a registered user
   I want to authenticate into the application
@@ -16,20 +16,22 @@ Feature: Login Flow Challenge
     Then the user should be redirected to the "Dashboard" page
     And the user should see a welcome message containing "Welcome"
 
-  #@regression @negative_testing @ui
-  #Scenario Outline: Failed login with invalid credentials
-    #When the user enters the username "<username>"
-  #  And the user enters the password "<password>"
-   # And clicks on the login button
-    #Then the user should see an error message saying "<error_message>"
+  @regression @negative_testing @ui
+  Scenario Outline: Failed login with invalid credentials
+    When the user enters his credentials:
+      | username | password |
+      | <username> | <password> |
+    # And the user enters the password "<password>"
+    And clicks on the login button
+    Then the user should see an error message saying "<error_message>"
 
-  #  Examples:
-   #   | username       | password      | error_message       |
-   #   |   EMPTY        |  EMPTY        | Both fields are required.|
-    #  |   EMPTY        | admin123      | Both fields are required.|
-     # | admin          | wrongPass     | Invalid password    |
-      #| admin          | EMPTY         | Invalid password    |
-      #| user           | wrongPass     | Invalid credentials |
+    Examples:
+      | username       | password      | error_message       |
+      |   EMPTY        |  EMPTY        | Both fields are required.|
+      |   EMPTY        | admin123      | Both fields are required.|
+      | admin          | wrongPass     | Invalid password    |
+      | admin          | EMPTY         | Invalid password    |
+      | user           | wrongPass     | Invalid credentials |
 
 
 

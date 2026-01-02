@@ -3,10 +3,7 @@ package pages;
 import customExceptions.AutomationException;
 import customExceptions.FrameworkException;
 import io.qameta.allure.internal.shadowed.jackson.databind.ser.Serializers;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -82,7 +79,7 @@ public abstract class BasePage {
     }
 
     // --------------------------
-    // LOCATORS
+    // locator typeSelector:
     // --------------------------
     //detecta si es css o xpath
     private static By getBy(String locator) {
@@ -95,7 +92,8 @@ public abstract class BasePage {
         }
     }
 
-    private WebElement find(String locator) {
+//finders
+    private WebElement findElement(String locator) {
         try {
             // Selenium intenta buscar el elemento
             return getWait()
@@ -109,16 +107,29 @@ public abstract class BasePage {
         }
     }
 
+
+    protected List<WebElement> findElements(String locator) {
+        try {
+            return getWait().until(ExpectedConditions.presenceOfAllElementsLocatedBy(getBy(locator)));
+
+        } catch (org.openqa.selenium.TimeoutException
+                 | org.openqa.selenium.NoSuchElementException e) {
+            throw new FrameworkException("No se pudieron encontrar la lista de elementos con el locator: "
+                    + locator + " pasado el tiempo de espera configurado", e);
+
+        }
+    }
+
     // --------------------------
     // ACTIONS
     // --------------------------
 // En BasePage.java
     public void clickElement(String locator) {
-        find(locator).click();
+        findElement(locator).click();
     }
 
     public void write(String locator, String keysToSend) {
-        WebElement element = find(locator);
+        WebElement element = findElement(locator);
         element.clear();
         element.sendKeys(normalizeText(keysToSend));
     }
@@ -126,26 +137,26 @@ public abstract class BasePage {
     // DROPDOWN methods
 
     public Select selectDropdown(String locator) {
-        Select dropdwon = new Select(find(locator));
+        Select dropdwon = new Select(findElement(locator));
         return dropdwon;
     }
 
 
     public void selectFromDropdownByValue(String locator, String value) {
-        new Select(find(locator)).selectByValue(value);
+        new Select(findElement(locator)).selectByValue(value);
 
     }
 
     public void selectFromDropdownByIndex(String locator, int index) {
-        new Select(find(locator)).selectByIndex(index);
+        new Select(findElement(locator)).selectByIndex(index);
     }
 
     public int dropdownSize(String locator) {
-        return new Select(find(locator)).getOptions().size();
+        return new Select(findElement(locator)).getOptions().size();
     }
 
     public void selectFromDropDown(String locator, String text) {
-        new Select(find(locator)).selectByVisibleText(text);
+        new Select(findElement(locator)).selectByVisibleText(text);
     }
 
     public List<String> getDropdownOptionsText(Select select) {
@@ -159,23 +170,22 @@ public abstract class BasePage {
 
     //isDisplayed:
     public boolean elementIsDisplayed(String locator) {
-        if (find(locator).isDisplayed()) {
+        if (findElement(locator).isDisplayed()) {
             System.out.println("El elemento es visible");
         } else {
             System.out.println("El elemento no es visible");
 
         }
-        return find(locator).isDisplayed();
+        return findElement(locator).isDisplayed();
     }
 
-
     public WebElement getWebElement(String locator) {
-        return find(locator);
+        return findElement(locator);
 
     }
 
     public String getTextOfWebElement(String locator) {
-        return find(locator).getText();
+        return findElement(locator).getText();
     }
 
     // --------------------------
@@ -187,7 +197,6 @@ public abstract class BasePage {
             driver.remove(); // ← CLAVE PARA PARALELISMO REAL
         }
     }
-
 
     //normalizador de textos
     private String normalizeText(String value) {

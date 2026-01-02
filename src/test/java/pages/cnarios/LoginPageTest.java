@@ -4,6 +4,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
 
+import java.util.List;
+
 public class LoginPageTest extends BasePage {
     private String TestLoginFlow = "https://www.cnarios.com/challenges/login-flow";
     private String userNameField = "(//input[contains(@class,'MuiOutlinedInput-input')])[1]";
@@ -12,6 +14,7 @@ public class LoginPageTest extends BasePage {
     private String messageAdmin = "(//div[contains(@class,'MuiAlert-message css-127h8j3')])[2]";
     private String DashBoardLocator = "//p[contains(text(), 'Dashboard')]";
     private String welcomeMessage = "//h5[contains(text(), 'Welcome')]";
+    private String alerts = "div[role='alert']";
 
     public void navigateToTestLogin() {
         navigateTo(TestLoginFlow);
@@ -56,7 +59,9 @@ public class LoginPageTest extends BasePage {
     }
 
 
-
+    public List<WebElement> getErrorMessages() {
+        return findElements(alerts);
+    }
 
 
 }
