@@ -38,7 +38,7 @@ public class loginFlowSteps {
 
     @Then("the user should see an error message saying {string}")
     public void validatingErrorMessageLogin(String message) {
-
+        verify.assertAnyElementContainsText(loginFlow.getErrorMessages(), message);
     }
 
     @Then("the user should be redirected to the {string} page")

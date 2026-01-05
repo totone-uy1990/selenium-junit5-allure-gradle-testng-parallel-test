@@ -75,8 +75,20 @@ public class CustomAssertions {
         Assertions.assertEquals(
                 expectedList,
                 actualList,
-                "El dropdown '" + dropdownName + "' no coincide con la lista esperada"
+                "El dropdown " + dropdownName + " no coincide con la lista esperada"
         );
+    }
+
+    public void assertAnyElementContainsText(List<WebElement> elements, String expectedText) {
+        if (elements == null || elements.isEmpty()) {
+            throw new AssertionError("No list element were found to validate the text");
+        }
+        boolean matchFound = elements.stream()
+                .filter(WebElement::isDisplayed)
+                .map(WebElement::getText)
+                .map(String::trim)
+                .anyMatch(text -> ((String) text)
+                        .contains(expectedText));
     }
 
     // --------------------------

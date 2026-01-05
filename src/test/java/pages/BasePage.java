@@ -92,7 +92,7 @@ public abstract class BasePage {
         }
     }
 
-//finders
+    //finders
     private WebElement findElement(String locator) {
         try {
             // Selenium intenta buscar el elemento
@@ -110,7 +110,9 @@ public abstract class BasePage {
 
     protected List<WebElement> findElements(String locator) {
         try {
-            return getWait().until(ExpectedConditions.presenceOfAllElementsLocatedBy(getBy(locator)));
+            return getWait().until(ExpectedConditions
+                    .presenceOfAllElementsLocatedBy
+                            (getBy(locator)));
 
         } catch (org.openqa.selenium.TimeoutException
                  | org.openqa.selenium.NoSuchElementException e) {
@@ -137,14 +139,12 @@ public abstract class BasePage {
     // DROPDOWN methods
 
     public Select selectDropdown(String locator) {
-        Select dropdwon = new Select(findElement(locator));
-        return dropdwon;
+        return new Select(findElement(locator));
     }
 
 
     public void selectFromDropdownByValue(String locator, String value) {
         new Select(findElement(locator)).selectByValue(value);
-
     }
 
     public void selectFromDropdownByIndex(String locator, int index) {
