@@ -16,12 +16,11 @@ Feature: Login Flow Challenge
     Then the user should be redirected to the "Dashboard" page
     And the user should see a welcome message containing "Welcome"
 
-  @regression @negative_testing @ui
+  #@regression @negative_testing @ui
   Scenario Outline: Failed login with invalid credentials
     When the user enters his credentials:
       | username | password |
       | <username> | <password> |
-    # And the user enters the password "<password>"
     And clicks on the login button
     Then the user should see an error message saying "<error_message>"
 

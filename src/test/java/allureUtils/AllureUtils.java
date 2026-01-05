@@ -8,4 +8,5 @@ public class AllureUtils {
     public static byte[] attachScreenshot(byte[] screenshot) {
         return screenshot;
     }
+
 }

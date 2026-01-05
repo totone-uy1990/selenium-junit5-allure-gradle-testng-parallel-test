@@ -198,7 +198,7 @@ public abstract class BasePage {
         }
     }
 
-    //normalizador de textos
+    //normalizador de textos para datos de cucumber
     private String normalizeText(String value) {
         if (value == null) {
             return null;   // o "" según tu criterio
