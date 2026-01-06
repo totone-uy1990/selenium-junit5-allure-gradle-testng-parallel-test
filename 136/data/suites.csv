@@ -1,4 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"  As a registered user
-  I want to authenticate into the application
-  So that I can access my secure account dashboard","7486","Successful login with valid credentials","","Fri Jan 02 09:30:21 UTC 2026","passed","Fri Jan 02 09:30:29 UTC 2026","","Login Flow Challenge","Successful login with valid credentials",""
