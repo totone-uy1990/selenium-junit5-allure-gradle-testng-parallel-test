@@ -1,0 +1,19 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","12537","Failed login with invalid credentials","","Sun Feb 15 21:21:08 UTC 2026","passed","Sun Feb 15 21:21:21 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","12512","Successful login with valid credentials","","Sun Feb 15 21:21:08 UTC 2026","passed","Sun Feb 15 21:21:21 UTC 2026","","Login Flow Challenge","Successful login with valid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","12482","Failed login with invalid credentials","","Sun Feb 15 21:21:08 UTC 2026","passed","Sun Feb 15 21:21:21 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","1564","Failed login with invalid credentials","","Sun Feb 15 21:21:21 UTC 2026","passed","Sun Feb 15 21:21:22 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","1612","Failed login with invalid credentials","","Sun Feb 15 21:21:21 UTC 2026","passed","Sun Feb 15 21:21:23 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","12428","Failed login with invalid credentials","","Sun Feb 15 21:21:08 UTC 2026","passed","Sun Feb 15 21:21:21 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
