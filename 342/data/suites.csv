@@ -1,0 +1,19 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","4930","Successful login with valid credentials","","Tue Mar 10 21:26:44 UTC 2026","passed","Tue Mar 10 21:26:49 UTC 2026","","Login Flow Challenge","Successful login with valid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","1548","Failed login with invalid credentials","","Tue Mar 10 21:26:49 UTC 2026","passed","Tue Mar 10 21:26:50 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","4932","Failed login with invalid credentials","","Tue Mar 10 21:26:44 UTC 2026","passed","Tue Mar 10 21:26:49 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","4822","Failed login with invalid credentials","","Tue Mar 10 21:26:44 UTC 2026","passed","Tue Mar 10 21:26:49 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","4978","Failed login with invalid credentials","","Tue Mar 10 21:26:44 UTC 2026","passed","Tue Mar 10 21:26:49 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
+"  As a registered user
+  I want to authenticate into the application
+  So that I can access my secure account dashboard","1531","Failed login with invalid credentials","","Tue Mar 10 21:26:49 UTC 2026","passed","Tue Mar 10 21:26:51 UTC 2026","","Login Flow Challenge","Failed login with invalid credentials",""
